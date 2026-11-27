@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<!-- Colour theme: purple by default. Add data-theme="sky" to <html> to try the baby/sky blue palette. -->
+<html lang="en-ZA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- ============================================================
+       SEO & SOCIAL
+       ============================================================ -->
+  <title>Nyiko Evidence Tsonani — Computer Systems Engineer</title>
+  <meta name="description" content="The personal record of Nyiko Evidence Tsonani, a Computer Systems Engineering student at Tshwane University of Technology, Soshanguve. Projects, tech stack, certificates and contact details." />
+  <meta name="author" content="Nyiko Evidence Tsonani" />
+  <meta name="theme-color" content="#F3EAF8" />
+
+  <!-- Open Graph -->
+  <!-- TODO: once the site is live, replace the og:url and og:image values with full absolute URLs (e.g. https://yourdomain.com/assets/images/nyiko-portrait.jpg) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Nyiko Evidence Tsonani — Computer Systems Engineer" />
+  <meta property="og:description" content="The Tsonani Times: the personal record of a Computer Systems Engineer from Soshanguve, Pretoria." />
+  <meta property="og:url" content="https://example.com/" />
+  <meta property="og:image" content="assets/images/nyiko-portrait.jpg" />
+  <meta property="og:locale" content="en_ZA" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon: "NT" monogram, white on soft purple (inline SVG) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%239461AE'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-size='30' font-weight='700' fill='%23FFFFFF'%3ENT%3C/text%3E%3C/svg%3E" />
+
+  <!-- Fonts: Caslon for headlines & body, Franklin for labels -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/src/css/styles.css" />
+
+  <!-- Runs before first paint: enables JS styles and shows the intro on the first visit of a session (no flash) -->
+  <script>
+    document.documentElement.classList.add("js");
+    try { if (!sessionStorage.getItem("tt-intro-seen")) document.documentElement.classList.add("intro-pending"); } catch (e) {}
+  </script>
+</head>
+
+<body>
+  <!-- Inline SVG sprite (icons reused across the page) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="icon-github" viewBox="0 0 16 16">
+      <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+    </symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============================================================
+       3.1 INTRO OVERLAY — "Take the glass"
+       A lens follows the cursor and reveals the portrait underneath.
+       Dismissed on click / after a few seconds / via "Skip intro".
+       Shown once per browser session (sessionStorage).
+       ============================================================ -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Introduction" hidden>
+    <!-- Layer 1: the blank newsprint the visitor sees first -->
+    <div class="intro__paper">
+      <p class="intro__kicker">Case File No. 01 · Classified</p>
+      <h2 class="intro__title">Take the glass —<br /><em>find the subject.</em></h2>
+      <p class="intro__hint">Move the lens across the page · click to enter</p>
+    </div>
+
+    <!-- Layer 2: the subject, only visible inside the lens (clip-path) -->
+    <div class="intro__reveal" aria-hidden="true">
+      <div class="intro__reveal-inner">
+        <div class="img-frame intro__portrait" data-fallback="NT">
+          <img src="assets/images/nyiko-portrait.jpg" alt="" />
+        </div>
+        <p class="intro__name">Nyiko Evidence <span>Tsonani</span></p>
+        <p class="intro__sub">Subject identified · Computer Systems Engineer</p>
+      </div>
+    </div>
+
+    <!-- The lens ring itself -->
+    <div class="intro__lens" aria-hidden="true"><span class="intro__handle"></span></div>
+
+    <button type="button" class="intro__skip" id="intro-skip">Skip intro →</button>
+  </div>
+
+  <!-- ============================================================
+       3.2 MASTHEAD & NAVIGATION
+       ============================================================ -->
+  <header class="masthead" id="top">
+    <div class="container">
+      <!-- Top line: location · edition · established -->
+      <div class="masthead__top">
+        <span>Pretoria, South Africa</span>
+        <span class="masthead__edition">The Investigation Edition</span>
+        <span>Est. 2022</span>
+      </div>
+
+      <!-- Name plate -->
+      <h1 class="masthead__name">
+        <a href="#top">Nyiko Evidence <span class="masthead__surname">Tsonani</span></a>
+      </h1>
+      <p class="masthead__tagline">The Personal Record of a Computer Systems Engineer</p>
+
+      <!-- Dateline: live date (js/main.js) · volume · section · price -->
+      <ul class="masthead__dateline" aria-label="Edition details">
+        <li><time id="dateline-date">Today</time></li>
+        <li>Vol. IV</li>
+        <li>Selected Works &amp; Notes</li>
+        <li>Price: One Coffee</li>
+      </ul>
+    </div>
+  </header>
+
+  <nav class="nav" id="nav" aria-label="Primary">
+    <div class="container nav__inner">
+      <button class="nav__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-panel">
+        <span class="nav__toggle-bars" aria-hidden="true"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+
+      <a class="nav__brand" href="#top" aria-label="Back to the front page">NT<span>✦</span></a>
+
+      <div class="nav__panel" id="nav-panel">
+        <ul class="nav__links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#work">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#stack">Stack</a></li>
+          <li><a href="#ledger">Education</a></li>
+          <li><a href="#certificates">Certificates</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="nav__actions">
+          <a class="nav__cv" href="assets/cv/Nyiko-Tsonani-CV.pdf" download>Download CV</a>
+          <a class="btn btn--sm" href="#contact">Hire her →</a>
+        </div>
+      </div>
+
+      <div class="nav__meta">
+        <span class="nav__loc">Pretoria, ZA</span>
+        <a class="nav__gh" href="https://github.com/nyikots0nani" target="_blank" rel="noopener" aria-label="GitHub profile (opens in a new tab)">
+          <svg class="icon" aria-hidden="true"><use href="#icon-github" /></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- ============================================================
+         3.3 HERO — The Front Page
+         ============================================================ -->
+    <section class="hero" aria-labelledby="hero-headline">
+      <div class="container">
+        <div class="hero__grid">
+          <div class="hero__copy reveal">
+            <p class="kicker">Case No. 01 — Findings Published</p>
+            <h2 class="hero__headline" id="hero-headline">A Soshanguve engineer who builds systems — <em>from the hardware up.</em></h2>
+            <p class="hero__lede">
+              Our correspondent followed the trail from assembly registers to SQL tables and
+              found one consistent suspect: a Tshwane University of Technology student who
+              wants to understand how a machine works all the way down before she builds on top of it.
+            </p>
+
+            <div class="btn-row">
+              <a class="btn" href="#work">Read the work →</a>
+              <a class="btn btn--outline" href="#contact">Get in touch</a>
+              <a class="btn btn--ghost" href="assets/cv/Nyiko-Tsonani-CV.pdf" download>Download CV</a>
+            </div>
+
+            <ul class="stamps" aria-label="Stamps">
+              <li class="stamp">TUT</li>
+              <li class="stamp stamp--royal">Pretoria</li>
+              <li class="stamp">Class of '26</li>
+              <li class="stamp stamp--royal">Late Final</li>
+            </ul>
+          </div>
+
+          <figure class="hero__figure reveal">
+            <div class="img-frame hero__portrait" data-fallback="NT">
+              <img src="assets/images/nyiko-portrait.jpg" alt="Professional portrait of Nyiko Evidence Tsonani in a dark blazer and white top, smiling" width="1024" height="1536" />
+            </div>
+            <figcaption class="caption">Pictured: Nyiko Evidence Tsonani</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         3.4 ABOUT — Notes from the Desk
+         ============================================================ -->
+    <section class="section about" id="about" aria-labelledby="about-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="kicker">Notes from the Desk</p>
+          <h2 class="section__title" id="about-title">The engineer who <em>reads the circuit</em> before the code.</h2>
+          <p class="byline">By the Desk Editor · Soshanguve Bureau</p>
+        </header>
+
+        <!-- Two columns: portrait on the left, the story on the right -->
+        <div class="about__grid">
+          <figure class="about__figure reveal">
+            <div class="img-frame about__photo" data-fallback="NT">
+              <img src="assets/images/nyiko-09.jpg" alt="Nyiko smiling in a pink knit turtleneck, black skirt and plaid headwrap on the TUT campus lawn" loading="lazy" width="1200" height="1600" />
+            </div>
+            <figcaption class="caption">Pictured on campus: Nyiko Evidence Tsonani, TUT Soshanguve.</figcaption>
+          </figure>
+
+          <div class="about__story reveal">
+            <p class="about__lede dropcap">
+              Nyiko Evidence Tsonani is studying towards a Diploma in Computer Systems Engineering
+              at Tshwane University of Technology in Soshanguve, where she has been enrolled since
+              January 2022. Colleagues describe her as the kind of student who opens the case to see
+              what is inside, then writes the software to make it behave.
+            </p>
+
+            <p>
+              Her work runs across the whole stack of a machine. At the low end she writes
+              Assembly and C++, close to the hardware; further up she builds applications in
+              C# and Java, and she keeps the records straight with SQL. It is an unusual range
+              for one desk, and she is happy to keep both ends of it.
+            </p>
+
+            <!-- Pull-quote: Nyiko, from the back page of Unify Tech: The Developer's Handbook -->
+            <blockquote class="pullquote">
+              <p>The backend is where trust is built: validate every request, enforce clear business rules, handle errors with meaningful messages and protect the database as the single source of truth.</p>
+              <cite>Nyiko Tsonani, Backend Developer · ARMS</cite>
+            </blockquote>
+
+            <p>
+              The trail begins at EPP Mhinga Secondary School, where she matriculated after
+              studying there from 2017 to 2021. In 2025 she added the WeThinkCode_ GenAI course
+              to her file, bringing generative AI into a toolkit that already ran from registers
+              to relational tables.
+            </p>
+
+            <p>
+              Off the clock, she is a familiar face at student leadership events on campus. She is
+              currently open to internships and graduate opportunities, and this paper understands
+              she replies quickly to any letter that arrives at the
+              <a href="#contact">Letters desk</a>.
+            </p>
+
+            <!-- Fact boxes -->
+            <div class="about__facts">
+              <aside class="sidebar-box" aria-labelledby="glance-title">
+                <p class="sidebar-box__label" id="glance-title">At a glance</p>
+                <dl class="glance">
+                  <div><dt>Studying</dt><dd>Diploma in Computer Systems Engineering</dd></div>
+                  <div><dt>Campus</dt><dd>TUT Soshanguve, since 2022</dd></div>
+                  <div><dt>Based in</dt><dd>Pretoria, South Africa</dd></div>
+                  <div><dt>Looking for</dt><dd>Internships &amp; graduate roles</dd></div>
+                </dl>
+              </aside>
+
+              <aside class="sidebar-box" aria-labelledby="speaks-title">
+                <p class="sidebar-box__label" id="speaks-title">Speaks fluently</p>
+                <ul>
+                  <li>Xitsonga</li>
+                  <li>Sepedi</li>
+                  <li>IsiZulu</li>
+                  <li>Tshivenda</li>
+                </ul>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         3.5 SELECTED WORKS — The Evidence
+         To add a project: copy one <article class="exhibit"> block.
+         ============================================================ -->
+    <section class="section work" id="work" aria-labelledby="work-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="kicker">The Evidence</p>
+          <h2 class="section__title" id="work-title">Selected works, <em>entered into the record.</em></h2>
+          <p class="byline">Four exhibits recovered and catalogued</p>
+        </header>
+
+        <div class="exhibits">
+
+          <!-- ===== EXHIBIT A — ARMS ===== -->
+          <!-- TODO (Exhibit A): confirm tech tags and year -->
+          <article class="exhibit reveal">
+            <div class="exhibit__media">
+              <div class="img-frame img-frame--evidence" data-fallback="Evidence pending">
+                <img src="assets/projects/arms.jpg" alt="ARMS landing page: TUT students working together outdoors under the heading Academic Resource Management System" loading="lazy" width="1910" height="936" />
+              </div>
+              <span class="seal seal--confirmed" aria-hidden="true">Confirmed</span>
+            </div>
+            <p class="exhibit__recovered">Recovered from: arms-frontend-roji.onrender.com</p>
+            <p class="exhibit__label">Exhibit A</p>
+            <h3 class="exhibit__title">ARMS — Academic Resource Management System</h3>
+            <p class="exhibit__desc">A web system for Tshwane University of Technology that helps students and staff manage academic resources and time. Nyiko was the team's Backend Developer. Its motto: "When we manage time better, we make room for success!"</p>
+            <ul class="tags" aria-label="Technologies">
+              <li>Backend</li><li>Request validation</li><li>Business rules</li><li>Database</li><li>Full-stack team</li> <!-- TODO: add the frameworks/languages used, e.g. Node.js, SQL -->
+            </ul>
+            <div class="exhibit__foot">
+              <span class="exhibit__year">2025</span> <!-- TODO: year -->
+              <a class="btn btn--sm" href="https://arms-frontend-roji.onrender.com/" target="_blank" rel="noopener">Open case file →</a>
+            </div>
+          </article>
+
+          <!-- ===== EXHIBIT B — UNIFY TECH ===== -->
+          <!-- TODO (Exhibit B): confirm tech tags and year -->
+          <article class="exhibit reveal">
+            <div class="exhibit__media exhibit__media--cover"> <!-- front + back page of the handbook, side by side -->
+              <div class="img-frame img-frame--evidence" data-fallback="Evidence pending">
+                <img class="book-page" src="assets/projects/unify-tech.png" alt="Cover of Unify Tech: The Developers Handbook, showing the five authors' photos as puzzle pieces" loading="lazy" width="542" height="771" />
+                <img class="book-page" src="assets/projects/unify-tech-back.png" alt="Back page of the handbook: key takeaways from the five authors, including Nyiko Tsonani, Backend Developer" loading="lazy" width="541" height="770" />
+              </div>
+              <span class="seal seal--confirmed" aria-hidden="true">Confirmed</span>
+            </div>
+            <p class="exhibit__recovered">Recovered from: unify-tech-developers-handbook.onrender.com</p>
+            <p class="exhibit__label">Exhibit B</p>
+            <h3 class="exhibit__title">Unify Tech — The Developer's Handbook</h3>
+            <p class="exhibit__desc">An online handbook for developers, co-written by a team of five authors including Nyiko, with every contributor pieced together on the cover.</p>
+            <ul class="tags" aria-label="Technologies">
+              <li>Handbook</li><li>Web</li><li>Team project</li> <!-- TODO: replace with the real stack -->
+            </ul>
+            <div class="exhibit__foot">
+              <span class="exhibit__year">2025</span> <!-- TODO: year -->
+              <a class="btn btn--sm" href="https://unify-tech-developers-handbook.onrender.com/" target="_blank" rel="noopener">Open case file →</a>
+            </div>
+          </article>
+
+          <!-- ===== EXHIBIT C — EDUACCESS ===== -->
+          <!-- TODO (Exhibit C): confirm tech tags and year -->
+          <article class="exhibit reveal">
+            <div class="exhibit__media">
+              <div class="img-frame img-frame--evidence" data-fallback="Evidence pending">
+                <img src="assets/projects/eduaccess.jpg" alt="EduAccess sign-in page asking for a student or staff number and password" loading="lazy" width="1600" height="781" />
+              </div>
+              <span class="seal seal--confirmed" aria-hidden="true">Confirmed</span>
+            </div>
+            <p class="exhibit__recovered">Recovered from: scsaacs-frontend.onrender.com</p>
+            <p class="exhibit__label">Exhibit C</p>
+            <h3 class="exhibit__title">EduAccess</h3>
+            <p class="exhibit__desc">Secure campus access and attendance. Students sign in with a student number; lecturers and admins with a staff number.</p>
+            <ul class="tags" aria-label="Technologies">
+              <li>Access control</li><li>Attendance</li><li>Auth</li> <!-- TODO: replace with the real stack -->
+            </ul>
+            <div class="exhibit__foot">
+              <span class="exhibit__year">2025</span> <!-- TODO: year -->
+              <a class="btn btn--sm" href="https://scsaacs-frontend.onrender.com" target="_blank" rel="noopener">Open case file →</a>
+            </div>
+          </article>
+
+          <!-- ===== EXHIBIT D — TSHWANE BUS SERVICES ===== -->
+          <!-- No live link yet. When there is one, replace the "Case file sealed" <span> below with:
+               <a class="btn btn--sm" href="YOUR-LINK" target="_blank" rel="noopener">Open case file →</a> -->
+          <!-- TODO (Exhibit D): confirm description, tech tags and year -->
+          <article class="exhibit reveal">
+            <div class="exhibit__media">
+              <div class="img-frame img-frame--evidence" data-fallback="Evidence pending">
+                <img src="assets/projects/tshwane-bus.jpg" alt="Tshwane Bus Services sign-in and sign-up screen, branded PrimeOak Solutions" loading="lazy" width="1437" height="771" />
+              </div>
+              <span class="seal seal--confirmed" aria-hidden="true">Confirmed</span>
+            </div>
+            <p class="exhibit__recovered">Recovered from: the PrimeOak Solutions archive</p>
+            <p class="exhibit__label">Exhibit D</p>
+            <h3 class="exhibit__title">Tshwane Bus Services</h3>
+            <p class="exhibit__desc">A commuter portal for bus services across Tshwane, built under the PrimeOak Solutions banner, with account sign-in and sign-up.</p>
+            <ul class="tags" aria-label="Technologies">
+              <li>Web app</li><li>Auth</li> <!-- TODO: replace with the real stack -->
+            </ul>
+            <div class="exhibit__foot">
+              <span class="exhibit__year">2025</span> <!-- TODO: year -->
+              <span class="btn btn--sm btn--sealed">Case file sealed</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         EXPERIENCE — Field Experience: On the Beat
+         To add an entry: copy one <article class="dispatch"> block.
+         ============================================================ -->
+    <section class="section experience" id="experience" aria-labelledby="experience-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="kicker">Field Experience</p>
+          <h2 class="section__title" id="experience-title">On the beat: <em>where she has put in the hours.</em></h2>
+          <p class="byline">Dispatches from the field</p>
+        </header>
+
+        <div class="dispatches">
+          <article class="dispatch reveal">
+            <p class="dispatch__date">July 2026 – Present</p>
+            <h3 class="dispatch__role">Backend Developer</h3>
+            <p class="dispatch__org">ICEP · ARMS — Academic Resource Management System</p>
+            <p class="dispatch__desc">Building the server side of ARMS for Tshwane University of Technology: validating every request, enforcing the business rules, returning meaningful errors and protecting the database as the single source of truth.</p>
+          </article>
+
+          <!-- TODO: add the dates of her student leadership role (e.g. 2024 – 2025) -->
+          <article class="dispatch reveal">
+            <p class="dispatch__date">Student leadership</p>
+            <h3 class="dispatch__role">Student Leader</h3>
+            <p class="dispatch__org">SGLD — Student Governance &amp; Leadership Directorate, TUT</p>
+            <p class="dispatch__desc">Active in student governance and leadership development on campus, including speaking to students at a Student Representative Council gathering.</p>
+          </article>
+        </div>
+        <!-- SGLD photo report: three photos + short summary -->
+        <div class="sgld reveal" aria-labelledby="sgld-title">
+          <p class="kicker">Photo report</p>
+          <h3 class="sgld__title" id="sgld-title">SGLD — <em>Student Governance &amp; Leadership Directorate</em></h3>
+
+          <div class="sgld__photos">
+            <figure class="sgld__photo">
+              <span class="img-frame" data-fallback="SGLD"><img src="assets/images/nyiko-08.jpg" alt="The SGLD student leaders in white SGLD shirts, seated and standing in front of a Tshwane University of Technology banner" loading="lazy" width="1280" height="960" /></span>
+              <figcaption class="caption">The SGLD cohort, leadership session.</figcaption>
+            </figure>
+            <figure class="sgld__photo">
+              <span class="img-frame" data-fallback="SGLD"><img src="assets/images/nyiko-11.jpg" alt="SGLD student leaders in white SGLD T-shirts laughing and posing together outdoors" loading="lazy" width="1600" height="1071" /></span>
+              <figcaption class="caption">Team-building day, all smiles.</figcaption>
+            </figure>
+            <figure class="sgld__photo">
+              <span class="img-frame" data-fallback="SGLD"><img src="assets/images/nyiko-13.jpg" alt="The SGLD delegation in white shirts and caps posing as a large group outside a building" loading="lazy" width="1279" height="720" /></span>
+              <figcaption class="caption">On the road with the SGLD delegation.</figcaption>
+            </figure>
+          </div>
+
+          <p class="sgld__summary">
+            The Student Governance and Leadership Directorate (SGLD) at Tshwane University of Technology
+            develops the students who lead on campus. Through leadership sessions, team-building days and
+            visits beyond campus, it builds the governance, teamwork and communication skills that student
+            leaders need to represent their peers well. As part of the SGLD cohort, Nyiko has learned to lead
+            alongside students from across the university and to speak up for the people she serves.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         3.6 TECH STACK — Forensics: The Lab Report
+         To add a technology: copy one <tr> row.
+         ============================================================ -->
+    <section class="section stack" id="stack" aria-labelledby="stack-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="kicker">Forensics</p>
+          <h2 class="section__title" id="stack-title">The Lab Report: <em>substances found at the scene.</em></h2>
+          <p class="byline">Samples analysed by the Soshanguve laboratory</p>
+        </header>
+
+        <div class="table-wrap reveal">
+          <table class="lab-table">
+            <caption class="visually-hidden">Programming languages Nyiko works with</caption>
+            <thead>
+              <tr>
+                <th scope="col">Substance</th>
+                <th scope="col">Code</th>
+                <th scope="col">Detected</th>
+                <th scope="col">Finding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">C++</th><td><code>CPP</code></td><td>Coursework</td><td>Systems</td></tr>
+              <tr><th scope="row">C#</th><td><code>CSH</code></td><td>Coursework</td><td>Applications</td></tr>
+              <tr><th scope="row">Java</th><td><code>JAV</code></td><td>Coursework</td><td>Object-oriented</td></tr>
+              <tr><th scope="row">SQL</th><td><code>SQL</code></td><td>Coursework</td><td>Databases</td></tr>
+              <tr><th scope="row">Assembly Language</th><td><code>ASM</code></td><td>Coursework</td><td>Low-level</td></tr>
+              <!-- Add more rows here, e.g.:
+              <tr><th scope="row">Python</th><td><code>PYT</code></td><td>Self-taught</td><td>Scripting</td></tr>
+              -->
+            </tbody>
+          </table>
+          <p class="table-note">Lab verdict: <em>positive for range</em> — traces found from the register to the relational table.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         3.8 EDUCATION — Known Whereabouts: The Career Ledger
+         ============================================================ -->
+    <section class="section ledger" id="ledger" aria-labelledby="ledger-title">
+      <div class="container container--narrow">
+        <header class="section__head reveal">
+          <p class="kicker">Known Whereabouts</p>
+          <h2 class="section__title" id="ledger-title">The Career Ledger: <em>where she has been.</em></h2>
+        </header>
+
+        <ol class="timeline">
+          <li class="timeline__item reveal">
+            <p class="timeline__date">2022 – Present</p>
+            <h3 class="timeline__title">Diploma in Computer Systems Engineering</h3>
+            <p class="timeline__place">Tshwane University of Technology, Soshanguve</p>
+          </li>
+          <li class="timeline__item reveal">
+            <p class="timeline__date">2025</p>
+            <h3 class="timeline__title">WeThinkCode_ GenAI Course</h3>
+            <p class="timeline__place">WeThinkCode_</p>
+          </li>
+          <li class="timeline__item reveal">
+            <p class="timeline__date">2017 – 2021</p>
+            <h3 class="timeline__title">Grade 12</h3>
+            <p class="timeline__place">EPP Mhinga Secondary School</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         3.7 CERTIFICATES — Credentials on File
+         ============================================================ -->
+    <section class="section certificates" id="certificates" aria-labelledby="cert-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="kicker">Credentials on File</p>
+          <h2 class="section__title" id="cert-title">Certified, sealed <em>and filed.</em></h2>
+          <p class="byline">Documents held at the records office</p>
+        </header>
+
+        <div class="certs">
+          <article class="cert reveal">
+            <span class="seal seal--cert" aria-hidden="true">✦</span>
+            <p class="cert__issuer">TUT · Institute for the Future of Work</p>
+            <h3 class="cert__title">Continuing Professional Development</h3>
+            <p class="cert__detail">Attended the 5th Annual Future of Work Dialogue: <em>"Advancing Africa's Resilient Future Through AI-Enabled Innovation Pathways"</em>, The Maslow Hotel, Pretoria.</p>
+            <p class="cert__year">30 Sep – 1 Oct 2026 · 2 CPD credits, category 1</p>
+            <p class="cert__ref">Validation no. 2026-0918-004072</p>
+            <a class="btn btn--sm" href="assets/certificates/cpd-future-of-work-2026.jpg" target="_blank" rel="noopener">View certificate →</a>
+          </article>
+
+          <article class="cert reveal">
+            <span class="seal seal--cert" aria-hidden="true">✦</span>
+            <p class="cert__issuer">WeThinkCode_</p>
+            <h3 class="cert__title">GenAI</h3>
+            <p class="cert__year">Issued 2025</p>
+            <!-- TODO: link to the WeThinkCode_ GenAI certificate (e.g. assets/certificates/wethinkcode-genai.pdf) -->
+            <a class="btn btn--sm" href="#" target="_blank" rel="noopener">View certificate →</a>
+          </article>
+
+          <!-- TODO: certificate placeholder — replace issuer, title, year and link, then remove the "cert--pending" class -->
+          <article class="cert cert--pending reveal">
+            <span class="seal seal--cert" aria-hidden="true">?</span>
+            <p class="cert__issuer">Issuer to be confirmed</p>
+            <h3 class="cert__title">Certificate pending</h3>
+            <p class="cert__year">Year — TBC</p>
+            <a class="btn btn--sm" href="#" aria-disabled="true" tabindex="-1">View certificate →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         SOCIAL ACTIVITIES & EVENTS — The Society Pages
+         One <article class="event"> per event. Copy the block to add another.
+         ============================================================ -->
+    <section class="section society" id="society" aria-labelledby="society-title">
+      <div class="container">
+        <!-- Newspaper section front: section strip, display headline, standfirst between rules -->
+        <header class="section-front reveal">
+          <div class="section-front__strip">
+            <span>Section C</span>
+            <span class="section-front__mid">The Society Pages</span>
+            <span>Events Desk</span>
+          </div>
+          <h2 class="section-front__title" id="society-title">Social Activities <em>&amp;</em> Events</h2>
+          <p class="section-front__standfirst">
+            Where she has been, who she met, and what she brought back to the desk.
+          </p>
+        </header>
+
+        <!-- ===== EVENT: iFoW ===== -->
+        <article class="event reveal" aria-labelledby="ifow-title">
+          <div class="event__photos">
+            <figure class="event__photo">
+              <span class="img-frame" data-fallback="iFoW"><img src="assets/images/ifow-01.jpg" alt="Nyiko smiling at a conference table wearing an event lanyard, with a large conference screen behind her" loading="lazy" width="809" height="1203" /></span>
+              <figcaption class="caption">In the audience, all smiles.</figcaption>
+            </figure>
+            <figure class="event__photo">
+              <span class="img-frame" data-fallback="iFoW"><img src="assets/images/ifow-02.jpg" alt="Nyiko in a white SGLD shirt and wide-leg trousers with her delegate badge, at the conference venue" loading="lazy" width="900" height="1600" /></span>
+              <figcaption class="caption">Delegate badge on, ready for the sessions.</figcaption>
+            </figure>
+          </div>
+
+          <div class="event__story">
+            <p class="kicker">Event report</p>
+            <h3 class="event__title" id="ifow-title">iFoW — <em>Institute for the Future of Work</em></h3>
+            <p class="event__dateline">Pretoria · Tshwane University of Technology</p>
+            <p class="event__lede">
+              Nyiko joined fellow students at an event run by the Institute for the Future of Work (iFoW),
+              an initiative of Tshwane University of Technology. Business owners and representatives from
+              companies took the room through how the business world really works.
+            </p>
+            <p>
+              The speakers shared what it takes to start a business, from turning an idea into an offer to
+              finding the first customers, and what companies look for in the people they hire. For an
+              engineer who builds systems, it was a close look at the businesses those systems are built for,
+              and at the path to one day starting her own.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         PHOTO DUMP — stacked photo deck
+         Tapping the top photo shuffles it to the back.
+         To add a photo, copy one <figure class="deck__card"> block.
+         ============================================================ -->
+    <section class="section photo-dump" id="photos" aria-labelledby="photos-title">
+      <div class="container">
+        <header class="section-front reveal">
+          <div class="section-front__strip">
+            <span>Section D</span>
+            <span class="section-front__mid">From the Archive</span>
+            <span>Snapshots</span>
+          </div>
+          <h2 class="section-front__title" id="photos-title">The Photo <em>Dump</em></h2>
+          <p class="section-front__standfirst">
+            Campus days, a red carpet and an afternoon on the water, as captured by the paper's own correspondents.
+          </p>
+          <p class="section-front__meta">Tap the top photo to shuffle the deck</p>
+        </header>
+
+        <div class="deck-wrap reveal">
+          <div class="deck" id="deck" tabindex="0" role="button" aria-roledescription="photo deck"
+               aria-label="Photo deck. Press Enter or tap to shuffle to the next photo.">
+            <figure class="deck__card">
+              <span class="img-frame" data-fallback="NT"><img src="assets/images/nyiko-01.jpg" alt="Nyiko smiling in a black blazer outside Building 7 on the TUT Soshanguve campus" loading="lazy" /></span>
+              <figcaption class="caption">Campus sunshine, Building 7.</figcaption>
+            </figure>
+            <figure class="deck__card">
+              <span class="img-frame" data-fallback="NT"><img src="assets/images/nyiko-03.jpg" alt="Nyiko laughing with her eyes closed outside Building 7" loading="lazy" /></span>
+              <figcaption class="caption">Between lectures, outside Building 7.</figcaption>
+            </figure>
+            <figure class="deck__card">
+              <span class="img-frame" data-fallback="NT"><img src="assets/images/nyiko-07.jpg" alt="Nyiko in a white dress and sunglasses, seated on the deck of a boat" loading="lazy" /></span>
+              <figcaption class="caption">Off the record: on deck.</figcaption>
+            </figure>
+            <figure class="deck__card">
+              <span class="img-frame" data-fallback="NT"><img src="assets/images/nyiko-04.jpg" alt="Nyiko in a white dress standing on a red carpet between gold stanchions" loading="lazy" /></span>
+              <figcaption class="caption">Red-carpet arrival, Soshanguve.</figcaption>
+            </figure>
+            <figure class="deck__card">
+              <span class="img-frame" data-fallback="NT"><img src="assets/images/nyiko-02.jpg" alt="Nyiko speaking into a microphone on stage in front of a Student Representative Council banner" loading="lazy" /></span>
+              <figcaption class="caption">On the record: taking the microphone at an SRC gathering.</figcaption>
+            </figure>
+            <figure class="deck__card">
+              <span class="img-frame" data-fallback="NT"><img src="assets/images/nyiko-05.jpg" alt="Full-length photo of Nyiko on artificial grass in front of a fence" loading="lazy" /></span>
+              <figcaption class="caption">Standing tall on the lawns.</figcaption>
+            </figure>
+            <figure class="deck__card">
+              <span class="img-frame" data-fallback="NT"><img src="assets/images/nyiko-10.jpg" alt="Nyiko posing on a wooden bench with one hand on her headwrap" loading="lazy" /></span>
+              <figcaption class="caption">Striking a pose on the quad.</figcaption>
+            </figure>
+            <figure class="deck__card">
+              <span class="img-frame" data-fallback="NT"><img src="assets/images/nyiko-06.jpg" alt="Nyiko leaning against a black fence, smiling" loading="lazy" /></span>
+              <figcaption class="caption">Leaning in, campus fence line.</figcaption>
+            </figure>
+          </div>
+
+          <div class="deck__controls">
+            <button type="button" class="deck__btn" id="deck-prev" aria-label="Previous photo">←</button>
+            <p class="deck__count" id="deck-count" aria-live="polite">1 / 8</p>
+            <button type="button" class="deck__btn" id="deck-next" aria-label="Shuffle to the next photo">→</button>
+          </div>
+          <button type="button" class="btn btn--sm btn--outline deck__enlarge" id="deck-enlarge">Enlarge photo ⤢</button>
+          <!-- The SGLD group photos (nyiko-08, -11, -13) are in the Experience section. nyiko-12.jpg duplicates nyiko-08.jpg. -->
+        </div>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         3.10 CONTACT — Letters & Commissions
+         ============================================================ -->
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="kicker">Letters &amp; Commissions</p>
+          <h2 class="section__title" id="contact-title">Write to the editor — <em>she reads every letter.</em></h2>
+        </header>
+
+        <div class="contact__grid">
+          <!--
+            FORM DELIVERY
+            By default the form opens the visitor's email app (mailto fallback).
+            To use Formspree instead:
+              1. Create a form at https://formspree.io
+              2. TODO: paste the form ID into data-formspree below, e.g. data-formspree="xabcdwxyz"
+          -->
+          <form class="letter reveal" id="contact-form" data-formspree="" novalidate>
+            <h3 class="letter__title">Put it in writing</h3>
+
+            <div class="field">
+              <label for="f-name">Name</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="f-email">Email</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="f-subject">Subject</label>
+              <input id="f-subject" name="subject" type="text" required />
+            </div>
+            <div class="field">
+              <label for="f-story">The story</label>
+              <textarea id="f-story" name="message" rows="6" required></textarea>
+            </div>
+
+            <div class="letter__foot">
+              <button class="btn" type="submit">Send the letter</button>
+              <p class="letter__note">Replies usually arrive within 24 hours.</p>
+            </div>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+
+          <aside class="dossier reveal" aria-labelledby="dossier-title">
+            <p class="kicker" id="dossier-title">Direct line</p>
+            <dl class="dossier__list">
+              <div>
+                <dt>Email</dt>
+                <dd><a href="mailto:tsonaninyiko@gmail.com">tsonaninyiko@gmail.com</a></dd>
+              </div>
+              <div>
+                <dt>Cell</dt>
+                <dd>
+                  <a href="tel:+27692543117">+27 69 254 3117</a>
+                  · <a href="https://wa.me/27692543117" target="_blank" rel="noopener">WhatsApp</a>
+                </dd>
+              </div>
+              <div>
+                <dt>GitHub</dt>
+                <dd><a href="https://github.com/nyikots0nani" target="_blank" rel="noopener">github.com/nyikots0nani</a></dd>
+              </div>
+              <div>
+                <dt>LinkedIn</dt>
+                <!-- TODO: add LinkedIn URL -->
+                <dd><a href="#" target="_blank" rel="noopener">LinkedIn profile</a></dd>
+              </div>
+              <div>
+                <dt>Location</dt>
+                <dd>Pretoria, South Africa · SAST (UTC+2)<br /><span class="clock">Local time: <time id="local-clock">--:--</time></span></dd>
+              </div>
+              <div>
+                <dt>Availability</dt>
+                <dd><span class="badge">Open to internships and graduate opportunities</span></dd>
+              </div>
+            </dl>
+            <a class="btn" href="assets/cv/Nyiko-Tsonani-CV.pdf" download>Download CV</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         CROSSWORD — The Puzzle Page
+         The grid and clues are defined in src/js/main.js (CROSSWORD).
+         ============================================================ -->
+    <section class="section puzzle" id="puzzle" aria-labelledby="puzzle-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="kicker">The Puzzle Page</p>
+          <h2 class="section__title" id="puzzle-title">The Tsonani crossword: <em>how closely did you read?</em></h2>
+          <p class="byline">Every answer is somewhere in this paper · click a square and type</p>
+        </header>
+
+        <div class="crossword reveal" id="crossword">
+          <div class="crossword__board">
+            <div class="crossword__grid" id="cw-grid" role="grid" aria-label="Crossword grid"></div>
+            <p class="crossword__active" id="cw-active" aria-live="polite"></p>
+            <div class="crossword__actions">
+              <button type="button" class="btn btn--sm" id="cw-check">Check answers</button>
+              <button type="button" class="btn btn--sm btn--outline" id="cw-reveal">Reveal</button>
+              <button type="button" class="btn btn--sm btn--ghost" id="cw-clear">Clear</button>
+            </div>
+            <p class="crossword__status" id="cw-status" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="crossword__clues">
+            <div>
+              <h3 class="crossword__heading">Across</h3>
+              <ol class="crossword__list" id="cw-across"></ol>
+            </div>
+            <div>
+              <h3 class="crossword__heading">Down</h3>
+              <ol class="crossword__list" id="cw-down"></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       3.11 FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__title">The Tsonani Times</p>
+      <div class="footer__cols">
+        <div>
+          <h2 class="footer__head">Sections</h2>
+          <ul>
+            <li><a href="#about">Notes from the Desk</a></li>
+            <li><a href="#work">The Evidence</a></li>
+            <li><a href="#experience">Field Experience</a></li>
+            <li><a href="#stack">The Lab Report</a></li>
+            <li><a href="#ledger">The Career Ledger</a></li>
+            <li><a href="#certificates">Credentials</a></li>
+            <li><a href="#society">Social Activities &amp; Events</a></li>
+            <li><a href="#photos">The Photo Dump</a></li>
+            <li><a href="#contact">Letters</a></li>
+            <li><a href="#puzzle">The Puzzle Page</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer__head">The Desk</h2>
+          <p>Nyiko Evidence Tsonani<br />Computer Systems Engineering<br />Tshwane University of Technology<br />Pretoria, South Africa</p>
+        </div>
+        <div>
+          <h2 class="footer__head">Wire Services</h2>
+          <ul>
+            <li><a href="https://github.com/nyikots0nani" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="#" target="_blank" rel="noopener">LinkedIn</a></li> <!-- TODO: add LinkedIn URL -->
+            <li><a href="mailto:tsonaninyiko@gmail.com">Email</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer__closed">Case Closed ✦</p>
+      <div class="footer__base">
+        <p>© 2026 The Tsonani Times · Printed in Pretoria</p>
+        <a href="#top" class="footer__top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       LIGHTBOX (Society Pages)
+       ============================================================ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+    <button class="lightbox__close" type="button" aria-label="Close photo viewer">×</button>
+    <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Previous photo">‹</button>
+    <figure class="lightbox__figure">
+      <img class="lightbox__img" src="" alt="" />
+      <figcaption class="lightbox__caption"></figcaption>
+    </figure>
+    <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Next photo">›</button>
+  </div>
+
+  <!-- Gold star cursor trail (see src/js/main.js → initStarTrail) -->
+  <div class="star-trail" id="star-trail" aria-hidden="true"></div>
+
+  <script type="module" src="/src/js/main.js"></script>
+</body>
+</html>

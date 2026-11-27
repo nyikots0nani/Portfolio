@@ -1,0 +1,15 @@
+{
+  "name": "tsonani-times-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "The Tsonani Times: portfolio of Nyiko Evidence Tsonani, Computer Systems Engineer",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^8.4.0"
+  }
+}
