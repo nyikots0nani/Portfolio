@@ -645,9 +645,208 @@
     });
   }
 
+  /* 11. SUDOKU ============================================================ */
+  // Puzzles are generated in the browser: a random full grid is built, then
+  // numbers are removed one by one, keeping only removals that leave exactly
+  // one solution. GIVENS controls how many numbers each level starts with.
+  function initSudoku() {
+    const gridEl = $("#sd-grid");
+    if (!gridEl) return;
+    const GIVENS = { easy: 40, medium: 32, hard: 27 };
+
+    const row = (i) => Math.floor(i / 9), col = (i) => i % 9;
+    const box = (i) => Math.floor(row(i) / 3) * 3 + Math.floor(col(i) / 3);
+    // peers[i] = every other cell sharing a row, column or box with cell i
+    const peers = Array.from({ length: 81 }, (_, i) =>
+      Array.from({ length: 81 }, (_, j) => j).filter((j) => j !== i && (row(j) === row(i) || col(j) === col(i) || box(j) === box(i))));
+
+    const shuffle = (arr) => { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
+    const candidates = (g, i) => { const used = new Set(peers[i].map((p) => g[p])); return [1, 2, 3, 4, 5, 6, 7, 8, 9].filter((n) => !used.has(n)); };
+
+    // Fill a grid completely (random order, so every puzzle is different)
+    function fill(g) {
+      const i = g.indexOf(0);
+      if (i < 0) return true;
+      for (const n of shuffle(candidates(g, i))) { g[i] = n; if (fill(g)) return true; }
+      g[i] = 0;
+      return false;
+    }
+
+    // Count solutions, stopping at `limit` (we only need to know "exactly one")
+    function countSolutions(g, limit = 2) {
+      let best = -1, bestCands = null;
+      for (let i = 0; i < 81; i++) {               // pick the emptiest-choice cell first (fast)
+        if (g[i]) continue;
+        const c = candidates(g, i);
+        if (!c.length) return 0;
+        if (!bestCands || c.length < bestCands.length) { best = i; bestCands = c; if (c.length === 1) break; }
+      }
+      if (best < 0) return 1;
+      let total = 0;
+      for (const n of bestCands) {
+        g[best] = n;
+        total += countSolutions(g, limit - total);
+        if (total >= limit) break;
+      }
+      g[best] = 0;
+      return total;
+    }
+
+    function generate(level) {
+      const solution = Array(81).fill(0);
+      fill(solution);
+      const puzzle = solution.slice();
+      let filled = 81;
+      for (const i of shuffle([...Array(81).keys()])) {
+        if (filled <= GIVENS[level]) break;
+        const keep = puzzle[i];
+        puzzle[i] = 0;
+        if (countSolutions(puzzle.slice()) !== 1) puzzle[i] = keep; else filled--;
+      }
+      return { puzzle, solution };
+    }
+
+    // ---- Board ----
+    const cells = [];
+    for (let i = 0; i < 81; i++) {
+      const input = document.createElement("input");
+      input.className = "sd-cell";
+      input.inputMode = "numeric";
+      input.maxLength = 1;
+      input.autocomplete = "off";
+      input.dataset.i = i;
+      input.setAttribute("aria-label", `Row ${row(i) + 1}, column ${col(i) + 1}`);
+      if (col(i) % 3 === 2 && col(i) < 8) input.classList.add("sd-cell--edge-r");
+      if (row(i) % 3 === 2 && row(i) < 8) input.classList.add("sd-cell--edge-b");
+      gridEl.appendChild(input);
+      cells.push(input);
+    }
+
+    const status = $("#sd-status");
+    const timerEl = $("#sd-timer");
+    let state = null, current = 0, seconds = 0, timer = null, solved = false;
+
+    const fmt = (s) => String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+    function startTimer() {
+      clearInterval(timer);
+      seconds = 0; timerEl.textContent = "00:00";
+      timer = setInterval(() => { if (!document.hidden) timerEl.textContent = fmt(++seconds); }, 1000);
+    }
+
+    const values = () => cells.map((c) => +c.value || 0);
+
+    function refresh() {
+      const v = values();
+      const focusVal = v[current];
+      cells.forEach((c, i) => {
+        // Clashes: same digit somewhere among the cell's peers
+        c.classList.toggle("is-conflict", !!v[i] && peers[i].some((p) => v[p] === v[i]));
+        c.classList.toggle("is-peer", i !== current && peers[current].includes(i));
+        c.classList.toggle("is-same", !!focusVal && i !== current && v[i] === focusVal);
+      });
+      if (!solved && v.every(Boolean) && !$$(".sd-cell.is-conflict", gridEl).length) {
+        solved = true;
+        clearInterval(timer);
+        status.textContent = `Case closed ✦ Solved in ${fmt(seconds)}. Nicely done!`;
+        gridEl.classList.add("is-solved");
+      }
+    }
+
+    function setValue(i, n) {
+      const c = cells[i];
+      if (c.readOnly || solved) return;
+      c.value = n ? String(n) : "";
+      c.classList.remove("is-wrong", "is-hint");
+      refresh();
+    }
+
+    function newPuzzle() {
+      const level = $("#sd-level").value;
+      status.textContent = "Setting a fresh puzzle…";
+      // Let the message paint before the (short) generation work
+      setTimeout(() => {
+        state = generate(level);
+        solved = false;
+        gridEl.classList.remove("is-solved");
+        cells.forEach((c, i) => {
+          const n = state.puzzle[i];
+          c.value = n ? String(n) : "";
+          c.readOnly = !!n;
+          c.classList.toggle("is-given", !!n);
+          c.classList.remove("is-wrong", "is-hint", "is-conflict");
+        });
+        current = state.puzzle.indexOf(0);
+        refresh();
+        startTimer();
+        status.textContent = `${level[0].toUpperCase() + level.slice(1)} puzzle · ${GIVENS[level]} numbers given.`;
+      }, 30);
+    }
+
+    cells.forEach((c, i) => {
+      c.addEventListener("focus", () => { current = i; refresh(); });
+      c.addEventListener("input", () => {
+        const n = (c.value.match(/[1-9]/g) || []).pop();
+        setValue(i, n ? +n : 0);
+      });
+      c.addEventListener("keydown", (e) => {
+        const moves = { ArrowUp: -9, ArrowDown: 9, ArrowLeft: -1, ArrowRight: 1 };
+        if (moves[e.key] !== undefined) {
+          e.preventDefault();
+          const next = i + moves[e.key];
+          if (next >= 0 && next < 81 && (Math.abs(moves[e.key]) === 9 || row(next) === row(i))) cells[next].focus();
+        } else if ((e.key === "Backspace" || e.key === "Delete") && !c.readOnly) {
+          e.preventDefault(); setValue(i, 0);
+        }
+      });
+    });
+
+    // On-screen number pad (keeps focus on the selected square)
+    $$("#sd-pad button").forEach((b) => {
+      b.addEventListener("mousedown", (e) => e.preventDefault());
+      b.addEventListener("click", () => { setValue(current, +b.dataset.n); cells[current].focus({ preventScroll: true }); });
+    });
+
+    $("#sd-new").addEventListener("click", newPuzzle);
+    $("#sd-level").addEventListener("change", newPuzzle);
+    $("#sd-clear").addEventListener("click", () => {
+      cells.forEach((c, i) => { if (!c.readOnly) { c.value = ""; c.classList.remove("is-wrong", "is-hint"); } });
+      solved = false; gridEl.classList.remove("is-solved");
+      refresh(); status.textContent = "Board cleared. Givens kept.";
+    });
+    $("#sd-check").addEventListener("click", () => {
+      if (!state) return;
+      let wrong = 0, empty = 0;
+      cells.forEach((c, i) => {
+        const bad = !c.readOnly && c.value && +c.value !== state.solution[i];
+        c.classList.toggle("is-wrong", !!bad);
+        if (bad) wrong++;
+        if (!c.value) empty++;
+      });
+      if (!solved) status.textContent = wrong ? `${wrong} number${wrong > 1 ? "s" : ""} don't belong there.` : `All correct so far. ${empty} square${empty === 1 ? "" : "s"} to go.`;
+    });
+    $("#sd-hint").addEventListener("click", () => {
+      if (!state || solved) return;
+      const open = cells.map((c, i) => i).filter((i) => !cells[i].readOnly && +cells[i].value !== state.solution[i]);
+      if (!open.length) return;
+      const i = open.includes(current) ? current : open[Math.floor(Math.random() * open.length)];
+      setValue(i, state.solution[i]);
+      cells[i].classList.add("is-hint");
+      cells[i].focus({ preventScroll: true });
+    });
+
+    // Build the first puzzle when the section comes near the screen (keeps page load light)
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { io.disconnect(); newPuzzle(); }
+      }, { rootMargin: "400px 0px" });
+      io.observe(gridEl);
+    } else newPuzzle();
+  }
+
   /* BOOT ================================================================= */
   initStarTrail();
   initCrossword();
+  initSudoku();
   initIntro();
   initImageFallbacks();
   initDates();

@@ -806,6 +806,66 @@
         </div>
       </div>
     </section>
+
+    <div class="dingbat" aria-hidden="true">✦ ❦ ✦</div>
+
+    <!-- ============================================================
+         SUDOKU — The Puzzle Page, continued
+         Puzzles are generated in src/js/main.js (initSudoku): each one
+         has exactly one solution.
+         ============================================================ -->
+    <section class="section sudoku-section" id="sudoku" aria-labelledby="sudoku-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="kicker">The Puzzle Page, continued</p>
+          <h2 class="section__title" id="sudoku-title">The Sudoku: <em>one to nine, no repeats.</em></h2>
+          <p class="byline">Fill every row, column and 3 × 3 box with the digits 1 to 9</p>
+        </header>
+
+        <div class="sudoku reveal">
+          <div class="sudoku__board">
+            <div class="sudoku__bar">
+              <label class="sudoku__level">
+                <span>Difficulty</span>
+                <select id="sd-level">
+                  <option value="easy">Easy</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </label>
+              <p class="sudoku__timer" aria-label="Time elapsed"><span aria-hidden="true">⏱</span> <time id="sd-timer">00:00</time></p>
+            </div>
+
+            <div class="sudoku__grid" id="sd-grid" role="grid" aria-label="Sudoku grid"></div>
+
+            <div class="sudoku__pad" id="sd-pad" aria-label="Number pad">
+              <button type="button" data-n="1">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button>
+              <button type="button" data-n="4">4</button><button type="button" data-n="5">5</button><button type="button" data-n="6">6</button>
+              <button type="button" data-n="7">7</button><button type="button" data-n="8">8</button><button type="button" data-n="9">9</button>
+              <button type="button" data-n="0" class="sudoku__erase" aria-label="Erase">⌫</button>
+            </div>
+          </div>
+
+          <aside class="sudoku__side">
+            <div class="sidebar-box">
+              <p class="sidebar-box__label">How to play</p>
+              <ul>
+                <li>Click a square, then type 1–9 or use the number pad.</li>
+                <li>Arrow keys move around; Backspace clears.</li>
+                <li>Clashing numbers turn red as you go.</li>
+              </ul>
+            </div>
+            <div class="sudoku__actions">
+              <button type="button" class="btn btn--sm" id="sd-new">New puzzle</button>
+              <button type="button" class="btn btn--sm btn--outline" id="sd-hint">Hint</button>
+              <button type="button" class="btn btn--sm btn--outline" id="sd-check">Check</button>
+              <button type="button" class="btn btn--sm btn--ghost" id="sd-clear">Clear</button>
+            </div>
+            <p class="sudoku__status" id="sd-status" role="status" aria-live="polite"></p>
+          </aside>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ============================================================
@@ -827,7 +887,8 @@
             <li><a href="#society">Social Activities &amp; Events</a></li>
             <li><a href="#photos">The Photo Dump</a></li>
             <li><a href="#contact">Letters</a></li>
-            <li><a href="#puzzle">The Puzzle Page</a></li>
+            <li><a href="#puzzle">The Crossword</a></li>
+            <li><a href="#sudoku">The Sudoku</a></li>
           </ul>
         </div>
         <div>

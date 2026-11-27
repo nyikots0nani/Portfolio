@@ -252,7 +252,23 @@ em { font-style: italic; }
   border-radius: var(--radius);
   background: var(--paper-deep);
 }
-.img-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease); }
+.img-frame img { width: 100%; height: 100%; object-fit: cover; }
+/* Black & white photos that bloom into colour on hover.
+   Hovering the photo itself, or the card/figure it sits in, restores colour.
+   Keyboard users get colour on focus too; on phones a tap counts as hover. */
+.img-frame img {
+  filter: grayscale(1) contrast(1.05);
+  transition: transform .6s var(--ease), filter .6s var(--ease);
+}
+.img-frame:hover img,
+:is(.hero__figure, .about__figure, .exhibit, .event__photo, .sgld__photo, .deck__card.is-top):hover .img-frame img,
+:is(.exhibit, .deck):focus-within .img-frame img,
+.deck:focus .deck__card.is-top .img-frame img {
+  filter: grayscale(0) contrast(1);
+}
+/* Shuffle deck: only the top card blooms; cards underneath stay black & white */
+.deck__card:not(.is-top) .img-frame img { filter: grayscale(1) contrast(1.05); }
+
 .img-frame::after {
   content: attr(data-fallback);
   position: absolute; inset: 0;
@@ -991,6 +1007,55 @@ body.intro-open { overflow: hidden; }
 .crossword__list li.is-solved { color: var(--ink-soft); text-decoration: line-through; text-decoration-color: var(--lavender); }
 .crossword__list b { font-family: var(--font-label); color: var(--orchid); margin-right: .5em; }
 
+/* 15e. SUDOKU =========================================================== */
+.sudoku { display: grid; grid-template-columns: auto minmax(240px, 340px); gap: clamp(28px, 5vw, 64px); justify-content: center; align-items: start; }
+.sudoku__board { display: grid; gap: 14px; }
+.sudoku__bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.sudoku__level { display: flex; align-items: center; gap: 10px; font-family: var(--font-label); text-transform: uppercase; letter-spacing: .12em; font-size: .66rem; font-weight: 700; color: var(--royal); }
+.sudoku__level select {
+  font: inherit; text-transform: none; letter-spacing: 0; font-size: .85rem; font-weight: 600; color: var(--ink);
+  padding: 6px 28px 6px 12px; border: 1px solid var(--lavender); border-radius: var(--radius-pill); background: var(--paper); cursor: pointer;
+}
+.sudoku__timer { font-family: var(--font-label); font-weight: 700; letter-spacing: .1em; font-size: .85rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+.sudoku__grid {
+  --cell: clamp(32px, calc((100vw - 48px) / 9), 52px);
+  display: grid; grid-template-columns: repeat(9, var(--cell)); grid-auto-rows: var(--cell);
+  border: 3px solid var(--ink); border-radius: 6px; overflow: hidden;
+  background: var(--paper);
+}
+.sd-cell {
+  width: 100%; height: 100%; padding: 0; margin: 0;
+  border: 0; border-right: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+  border-radius: 0; background: transparent;
+  font-family: var(--font-body); font-size: calc(var(--cell) * .52); text-align: center; color: var(--orchid);
+  caret-color: transparent; cursor: pointer; transition: background .12s;
+}
+.sd-cell:nth-child(9n) { border-right: 0; }
+.sd-cell:nth-child(n+73) { border-bottom: 0; }
+.sd-cell--edge-r { border-right: 2px solid var(--ink); }
+.sd-cell--edge-b { border-bottom: 2px solid var(--ink); }
+.sd-cell.is-given { color: var(--ink); font-weight: 700; cursor: default; }
+.sd-cell.is-peer { background: color-mix(in srgb, var(--lavender-mist) 80%, transparent); }
+.sd-cell.is-same { background: var(--lavender-light); }
+.sd-cell:focus { outline: none; background: var(--lavender-light); box-shadow: inset 0 0 0 2px var(--royal); }
+.sd-cell.is-conflict { color: #B23A5B; background: color-mix(in srgb, #B23A5B 12%, transparent); }
+.sd-cell.is-wrong { text-decoration: line-through; color: #B23A5B; }
+.sd-cell.is-hint { color: var(--royal); font-style: italic; }
+.sudoku__grid.is-solved { box-shadow: 0 0 0 4px var(--lavender-light), var(--shadow-lift); }
+.sudoku__grid.is-solved .sd-cell { color: var(--ink); }
+
+.sudoku__pad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.sudoku__pad button {
+  height: 44px; border-radius: 10px; border: 1px solid var(--lavender); background: transparent; cursor: pointer;
+  font-family: var(--font-body); font-size: 1.2rem; color: var(--royal); transition: background .15s, color .15s;
+}
+.sudoku__pad button:hover { background: var(--royal); color: var(--white); }
+.sudoku__side { display: grid; gap: 18px; }
+.sudoku__side .sidebar-box li { font-style: normal; font-size: .95rem; }
+.sudoku__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.sudoku__status { font-family: var(--font-label); font-size: .8rem; letter-spacing: .05em; color: var(--orchid); min-height: 1.2em; }
+
 /* 15d. GOLD STAR CURSOR TRAIL =========================================== */
 .star-trail { position: fixed; inset: 0; pointer-events: none; z-index: 10002; }
 .star {
@@ -1035,6 +1100,8 @@ body.intro-open { overflow: hidden; }
   .event { grid-template-columns: 1fr; }
   .event__photos { max-width: 560px; margin: 0 auto 28px; width: 100%; }
   .crossword { grid-template-columns: 1fr; }
+  .sudoku { grid-template-columns: 1fr; justify-items: center; }
+  .sudoku__side { max-width: 480px; width: 100%; }
   .certs { grid-template-columns: repeat(2, 1fr); }
 }
 
